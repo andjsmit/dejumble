@@ -1,0 +1,7 @@
+GREP EXAMPLES
+*************
+
+
+Get all 24 letter lowercase words from words.txt
+------------------------------------------------
+LC_ALL=C egrep '^[a-z]{24}$' words.txt > words24.txt
