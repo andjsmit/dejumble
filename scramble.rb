@@ -30,7 +30,7 @@ class Scramble
       letter_array = @letters.split(//)
       var_str = ""
       (@letter_count - 1).downto(1){|i|
-        div_mod = var_num.divmod(1..i).inject(:*)
+        div_mod = var_num.divmod (1..i).inject(:*)
         letter2get = div_mod[0]
         var_num = div_mod[1]
         var_str = var_str + letter_array[letter2get].to_s()
@@ -69,10 +69,10 @@ class Scramble
 
 end
 
-scramble = Scramble.new("clasif")
+scramble = Scramble.new("htarsy")
 var_num = 2
 puts "Scramble : " + scramble.letters
 puts "Variant Count : " + scramble.variant_count.to_s()
-puts "Variant " + var_num.to_s + " : " + scramble.variant(var_num)
+#rubyputs "Variant " + var_num.to_s + " : " + scramble.variant(var_num)
 puts "------Words--------"
 puts scramble.descramble.to_s()
