@@ -1,6 +1,8 @@
 #Ruby Test Class
 
 class Scramble
+  
+  require 'ffi/aspell'
 
   attr_reader :letters, :variant_count
 
@@ -9,18 +11,6 @@ class Scramble
     @variant_count = (1..(@letters.length.zero? ? 1 : @letters.length)).inject(:*)
     @letter_count = @letters.length
   end
-
-=begin
-  #Return original letters
-  def letters
-    @letters
-  end
-
-  #Return number of variant for Scramble
-  def variant_count    
-    @variant_count
-  end
-=end
 
   #Return a variant
   def variant (var_num)
@@ -45,6 +35,7 @@ class Scramble
   end
   
   #Return array of words found in letters
+=begin
   def descramble
     wordfile = "words" + @letter_count.to_s() + ".txt"
     words = Array.new
@@ -61,18 +52,51 @@ class Scramble
     }    
     return words
   end
+=end
+
+  def descramble
+    words = Array.new
+    speller = FFI::Aspell::Speller.new('en_US')
+    0.upto(@variant_count - 1) do |i|
+      this_var = variant(i)
+      words.push this_var if speller.correct?(this_var)
+      #if word_check_aspell(this_var)
+      #  words.push this_var
+      #end 
+    end
+    speller.close
+    return words 
+  end
   
   #Use pattern to split letters into words
   def descramble_pattern(pattern)
+
+  end
+
+private
+
+  def word_check_file(this_var)  
+    wordfile = "words" + @letter_count.to_s() + ".txt"
+    file = File.open("words/" + wordfile) if File.exists?("words/" + wordfile)
+    file.each{|line|
+      word = line.delete "\n"
+      if word == this_var
+        return true
+      end
+    }
+    file.close
+    return false
+  end
   
+  def word_check_aspell(this_var)
+    speller = FFI::Aspell::Speller.new('en_US')
+    if speller.correct?(this_var)
+      return true
+    else
+      return false
+    end
+    speller.close
   end
 
 end
 
-scramble = Scramble.new("htarsy")
-var_num = 2
-puts "Scramble : " + scramble.letters
-puts "Variant Count : " + scramble.variant_count.to_s()
-#rubyputs "Variant " + var_num.to_s + " : " + scramble.variant(var_num)
-puts "------Words--------"
-puts scramble.descramble.to_s()
