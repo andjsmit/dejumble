@@ -1,4 +1,4 @@
-#Ruby Test Class
+# Class to find words in string of letters
 
 class Scramble
   
@@ -59,10 +59,7 @@ class Scramble
     speller = FFI::Aspell::Speller.new('en_US')
     0.upto(@variant_count - 1) do |i|
       this_var = variant(i)
-      words.push this_var if speller.correct?(this_var)
-      #if word_check_aspell(this_var)
-      #  words.push this_var
-      #end 
+      words.push this_var if speller.correct?(this_var) && !words.include?(this_var)
     end
     speller.close
     return words 
